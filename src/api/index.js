@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:5000'
+axios.defaults.baseURL = 'https://tame-gray-gosling-gear.cyclic.app'
 
 axios.interceptors.request.use((req) => {
   if (localStorage.getItem('keywords')) {

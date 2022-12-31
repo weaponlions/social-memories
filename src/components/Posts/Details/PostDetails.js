@@ -6,7 +6,8 @@ import { useParams, Link } from 'react-router-dom';
 import { singlePost } from '../../../Redux/actions';
 import CommentSection from './CommentSection';
 import { card, section, imageSection, media, paper } from './styles';
-import { END } from '../../../Redux/actionTypes';
+import { END } from '../../../Redux/actionTypes'; 
+import Image from '../../../images/Text.png'
 
 
 export const PostDetails = () => {
@@ -63,7 +64,7 @@ export const PostDetails = () => {
           <Divider style={{ margin: '20px 0' }} /> */} 
         </Paper>
         <Box component={"div"} sx={imageSection}>
-          <img style={media} alt={post ? post?.title ? post.title : '' : ''} src={post ? post?.selectedFile ? `https://tame-gray-gosling-gear.cyclic.app${post.selectedFile}` : '' : ''}  />
+          <img style={media} alt={post ? post?.title ? post.title : '' : ''} src={post ? post?.selectedFile ? post.selectedFile : Image : Image}  />
         </Box>
       </Paper>
           <Divider style={{ margin: '20px 0' }} />
