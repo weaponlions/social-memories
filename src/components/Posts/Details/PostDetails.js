@@ -60,7 +60,7 @@ export const PostDetails = () => {
           <Divider style={{ margin: '20px 0' }} /> */} 
         </Paper>
         <Box component={"div"} sx={imageSection}>
-          <img style={media} alt={post ? post?.title ? post.title : '' : ''} src={post ? post?.selectedFile ? `https://social-memories-mern.onrender.com${post.selectedFile}` : '' : ''}  />
+          <img style={media} alt={post ? post?.title ? post.title : '' : ''} src={post ? post?.selectedFile ? `https://tame-gray-gosling-gear.cyclic.app${post.selectedFile}` : '' : ''}  />
         </Box>
       </Paper>
           <Divider style={{ margin: '20px 0' }} />

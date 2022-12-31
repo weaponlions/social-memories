@@ -69,7 +69,7 @@ const Post = ({ post }) => {
             sx={media}
             image={
               post.selectedFile
-                ? `https://social-memories-mern.onrender.com${post.selectedFile}`
+                ? `https://tame-gray-gosling-gear.cyclic.app/${post.selectedFile}`
                 : Image
             }
             title={post.title}

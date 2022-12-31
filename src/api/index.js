@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'https://social-memories-mern.onrender.com'
+axios.defaults.baseURL = 'https://tame-gray-gosling-gear.cyclic.app/'
 
 axios.interceptors.request.use((req) => {
   if (localStorage.getItem('keywords')) {
