@@ -6,6 +6,7 @@ import { useParams, Link } from 'react-router-dom';
 import { singlePost } from '../../../Redux/actions';
 import CommentSection from './CommentSection';
 import { card, section, imageSection, media, paper } from './styles';
+import { END } from '../../../Redux/actionTypes';
 
 
 export const PostDetails = () => {
@@ -29,10 +30,12 @@ export const PostDetails = () => {
     
   const Sleep = (time) => {
     setTimeout(()=> {
-      dispatch({type: 'END'});
+      dispatch({type: END});
     }, time);
   };
-   Sleep(1000)
+   Sleep(1000);
+
+
   return (
     <>
     { !isLoading && (

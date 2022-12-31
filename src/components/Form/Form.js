@@ -1,11 +1,11 @@
 import React, {useState, forwardRef, useEffect, useRef } from 'react' 
 import { Dialog, Button, Slide, Typography, Divider, TextField, Paper } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close'; 
-import { paper, root, buttonSubmit, fileInput, form } from "./styles"; 
+import { paper, root, buttonSubmit, fileInput, form, buttonSearchAdd } from "./styles"; 
 import { useDispatch, useSelector } from "react-redux";
-import { createPost, erasePostID, updatePost, updatePostWithImg } from "../../Redux/actions";
-// import FileUpload from 'react-material-file-upload';
-import { Chip } from '@mui/material'
+import { createPost, erasePostID, updatePost } from "../../Redux/actions";
+import { Chip } from '@mui/material';
+import { SEND } from '../../Redux/actionTypes';
 
 const initialState = {
   title: "",
@@ -24,10 +24,10 @@ export const Form = ({open, setOpen}) => {
     const posts = useSelector((state) => state.postReducer);
     const postID = useSelector((state) => state.updateIdReducer);
     const isLogged = useSelector((state) => state.spyReducer);
-    const [postData, setPostData] = useState(initialState); 
-    const [files, setFiles] = useState([]); 
- 
-    const chipRef = useRef()
+    const [postData, setPostData] = useState(initialState);
+    const [track, setTrack] = useState();
+
+    const tagRef = useRef();
     const titleRef = useRef()
     const messageRef = useRef()
   
@@ -53,10 +53,7 @@ export const Form = ({open, setOpen}) => {
       // eslint-disable-next-line
     }, [postID]);
 
-    useEffect(()=> {
-      setPostData({...postData, selectedFile : files ? files[0] ? files[0] : '' : '' });
-      // eslint-disable-next-line
-    }, [files])
+     
   
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -64,36 +61,34 @@ export const Form = ({open, setOpen}) => {
       // validate 
       if(postData['title'] === ''){
         titleRef.current.focus()
-        return dispatch({ type : 'SEND', payload : { message : "Title is Required", mode : 'warning' } });
+        return dispatch({ type : SEND, payload : { message : "Title is Required", mode : 'warning' } });
       }
 
       if(postData['message'] === ''){
         messageRef.current.focus()
-        return dispatch({ type : 'SEND', payload : { message : "Message is Required", mode : 'warning' } });
+        return dispatch({ type : SEND, payload : { message : "Message is Required", mode : 'warning' } });
       }
 
       if(postData['tags'].length === 0){
-        chipRef.current.focus()
-        return dispatch({ type : 'SEND', payload : { message : "Tags is Required", mode : 'warning' } });
+        tagRef.current.focus()
+        return dispatch({ type : SEND, payload : { message : "Tags is Required", mode : 'warning' } });
       }
  
       const form = new FormData();
       form.append("title", postData["title"]);
       form.append("tags", postData["tags"].join(","));
-      form.append("message", postData["message"]);
+      form.append("message", postData["message"]); 
       
-      if (postID) {
-        if (postData["selectedFile"] !== "") {
-          form.append("old_file", postData["old_file"]);
-          form.append("selectedFile", postData["selectedFile"]);
-          dispatch(updatePostWithImg(form, postID));
-        } else {
-          dispatch(updatePost(form, postID));
+      
+      if (postID) { 
+        if (postData["selectedFile"] !== '') { 
+          form.append("selectedFile", postData["selectedFile"]); 
         }
-      } 
+          dispatch(updatePost(form, postID)); 
+       } 
       else {
         if (postData["selectedFile"] === '') { 
-          return dispatch({ type : 'SEND', payload : { message : "Image is Required, Please Upload ", mode : 'warning' } });
+          return dispatch({ type : SEND, payload : { message : "Image is Required, Please Upload ", mode : 'warning' } });
         }
         form.append("selectedFile", postData["selectedFile"]);
         dispatch(createPost(form));
@@ -105,8 +100,7 @@ export const Form = ({open, setOpen}) => {
   
     const handleClear = () => {
       setPostData(initialState);
-      dispatch(erasePostID());
-      setFiles([]);
+      dispatch(erasePostID()); 
     };
     
     const handleAddChip = (tag) => {  
@@ -115,6 +109,14 @@ export const Form = ({open, setOpen}) => {
       }  
     };
   
+    const handleAddChipBtn = () => { 
+      if (track !== '' && track !== undefined ) {
+        handleAddChip(track);
+        tagRef.current.value = '';
+        tagRef.current.focus();
+      } 
+    }; 
+
     const handleDeleteChip = (chipToDelete) => { 
       setPostData({
         ...postData,
@@ -219,42 +221,46 @@ export const Form = ({open, setOpen}) => {
                       />
                     )) 
                     ) : '',
-                    onKeyPress: (e) => { 
-                      // dispatch({ type : 'SEND', payload : { message : e.code, mode : 'warning' } });
-                      if (((e.code === "Enter") || (e.code === "Space")) && e.target.value !== '') {
-                        handleAddChip(e.target.value)
-                        e.target.value = '';
-                        chipRef.current.focus()
-                      }
+                    onKeyDownCapture: (e) => {  
+                  const value = (e.target.value).trim()
+                  setTrack(value) 
+                  if (value !== '' && (e.code === "Enter" || e.code === "Space") ) {
+                    handleAddChip(value);
+                    e.target.value = ""; 
+                    tagRef.current.focus()
+                  }
                     },
                     sx : { 
                         flexWrap: 'wrap',
                         flexDirection: 'row'
                      },
-                     placeholder: (postData['tags'][0] === undefined) ? "" : "Write Tag",
-                     onKeyDownCapture: (e) => {
-                      // console.log(e.which); 
-                      // dispatch({ type : 'SEND', payload : { message : `${e.which}`, mode : 'warning' } });
-                     },
-                     
+                     placeholder: (track === "" || track === undefined ) ? "Write Tag" : "Write Tag",
                    }} 
                    variant="outlined"
                    fullWidth
                    sx={(theme) => ({margin: theme.spacing(1) })} 
                    label = "Write Tag (Press Space for Multiple)"
-                   inputRef= {chipRef}
-                   onKeyDown = {(e) => {
-                    // console.log(e.charCode || e.keyCode || e.which);
-                    const keyCode = e.charCode || e.keyCode || e.which;
-                    const digit = String.fromCharCode(keyCode);
-                    dispatch({ type : 'SEND', payload : { message : `${e.charCode} + ${e.keyCode} + ${e.which} +${digit}`, mode : 'warning' } });
-                   }}
-                 />  
+                   inputRef= {tagRef} 
+                 /> 
+
+                 { track && track !== '' && track !== undefined && <Button 
+                  variant="contained"
+                  color="primary"
+                  sx={buttonSearchAdd} 
+                  onClick={handleAddChipBtn}
+                  >
+                    ADD Tag
+                  </Button> } 
                  
                  <div style={{margin : '10px'}} >
                    <input type='file' style={fileInput} onChange={(e)=>{  
-                    if (e.target.files[0] !== '') {
-                      setFiles([e.target.files[0]])
+                    const file = e.target.files[0];
+                    if (file && file.type.substring(0, 5) === "image") {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setPostData({ ...postData, selectedFile: reader.result });
+                      };
+                      reader.readAsDataURL(file);
                     }
                    }} accept="image/*" /> 
                  </div> 

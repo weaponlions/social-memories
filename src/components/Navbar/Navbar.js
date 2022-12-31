@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useResolvedPath } from 'react-router-dom'; 
 import { Button, Paper } from '@mui/material';
 import { tokenExpired } from '../../Redux/auth';
-import { MyAppBar, MyTypography, MyToolbar, MyAvatar, profile, userName, disabled, brandContainer, purple, logout, image } from './styles';
-
+import { MyAppBar, MyTypography, MyToolbar, MyAvatar, profile, userName, brandContainer, purple, logout, image } from './styles';
+import { LOGOUT, SEND, START } from '../../Redux/actionTypes';
 
 export const Navbar = () => {
 
@@ -37,13 +37,13 @@ export const Navbar = () => {
     }, [isLogged]);
     
     const handleLogout = async () => {
-      dispatch({type: 'LOGOUT'});
-      dispatch({type : 'SEND', payload : {message : 'Logout Done, Please Login Again', mode : 'warning'}});
+      dispatch({type: LOGOUT});
+      dispatch({type : SEND, payload : {message : 'Logout Done, Please Login Again', mode : 'warning'}});
     }
 
     const backHome = async () => {
       // await dispatch({type: RESET})
-      dispatch({type: 'START'})
+      dispatch({type: START})
     }
      
   return (
@@ -61,7 +61,7 @@ export const Navbar = () => {
                     <Button variant='contained' sx={logout} color='secondary' onClick={handleLogout} >Logout</Button>
                 </Paper>
             ) : (
-              <Button component={Link} onClick={() => dispatch({type : 'START'})} to='/auth' style={{pointerEvents : `${(path === '/auth') ? 'none' : ''}`}} variant='contained' color='primary' >Sign In</Button>
+              <Button component={Link} onClick={() => dispatch({type : START})} to='/auth' style={{pointerEvents : `${(path === '/auth') ? 'none' : ''}`}} variant='contained' color='primary' >Sign In</Button>
             )}
           </MyToolbar>
         </MyAppBar>

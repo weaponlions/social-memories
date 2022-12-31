@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import {Link} from 'react-router-dom'
 import moment from "moment"; 
 import '../styles.css';
+import { SET_TAG } from '../../../../../Redux/actionTypes';
 
 
 const CommentFooter = ({userID, username, parentID, childExist, handleReadMore, createdAt }) => {
@@ -12,7 +13,7 @@ const CommentFooter = ({userID, username, parentID, childExist, handleReadMore, 
  
 
   const handleTagUser = async() => {
-    dispatch({type : 'SET_TAG', payload : {username : username , parentID : parentID}})
+    dispatch({type : SET_TAG, payload : {username : username , parentID : parentID}})
   }
   return(
     <div className="media-comment-footer">  

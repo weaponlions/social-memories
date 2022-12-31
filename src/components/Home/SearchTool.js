@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState, useRef } from "react";
 import {
   Dialog,
   Button,
@@ -9,11 +9,12 @@ import {
   TextField,
   Chip,
 } from "@mui/material";
-import { buttonSearch } from "./styles";
+import { buttonSearch, buttonSearchAdd } from "./styles";
 import { useDispatch } from "react-redux";
 import { getPostsBySearch } from "../../Redux/actions";
 import { RESET } from "../../Redux/actionTypes";
 import { useNavigate } from "react-router-dom";
+import { START } from "../../Redux/actionTypes";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
@@ -30,6 +31,8 @@ export const SearchTool = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [track, setTrack] = useState();
+  const tagRef = useRef();
 
   const searchPost = async (tags) => {
     if (title.trim() || tags) {
@@ -46,7 +49,7 @@ export const SearchTool = ({
   };
 
   const Sleep = async (time) => {
-    dispatch({ type: "START" });
+    dispatch({ type: START });
     setTimeout(async () => {
       await dispatch(getPostsBySearch({ title, tags: tags && tags.join(",") }));
     }, time);
@@ -58,6 +61,15 @@ export const SearchTool = ({
 
   const handleAddChip = (tag) => {
     setTags([...tags, tag]);
+    setTrack('')
+  };
+
+  const handleAddChipBtn = () => { 
+    if (track !== '' && track !== undefined ) {
+      handleAddChip(track);
+      tagRef.current.value = '';
+      tagRef.current.focus();
+    } 
   };
 
   const handleDeleteChip = (chipToDelete) => {
@@ -73,7 +85,6 @@ export const SearchTool = ({
     setTitle("");
     handleClose();
   }; 
-  
   return (
     <>
       <div>
@@ -139,24 +150,35 @@ export const SearchTool = ({
                     sx={(theme) => ({ margin: theme.spacing(1) })}
                   />
                 )) : '',
-                onKeyPress: (e) => {
-                  if (e.code === "Enter" || e.code === "Space") {
-                    handleAddChip(e.target.value);
-                    e.target.value = ""; 
+                onKeyDownCapture: (e) => { 
+                  const value = (e.target.value).trim()
+                  setTrack(value) 
+                  if (value !== '' && (e.code === "Enter" || e.code === "Space") ) {
+                    handleAddChip(value);
+                    e.target.value = "";
+                    tagRef.current.focus() 
                   }
                 },
                 sx: {
                   flexWrap: "wrap",
                   flexDirection: "row",
                 },
-                placeholder: (tags[0] === undefined) ? '' : "Search Tag",
+                placeholder: (track === "" || track === undefined ) ? "Search Tag" : "Search Tag",
               }}
               variant="outlined"
               fullWidth
               sx={(theme) => ({ margin: theme.spacing(1) })}
               label = "Write Tag (Press Space for Multiple)"
+              inputRef={tagRef}
             />
-
+            { track && track !== '' && track !== undefined && <Button 
+             variant="contained"
+             color="primary"
+             sx={buttonSearchAdd} 
+             onClick={handleAddChipBtn}
+            >
+              ADD Tag
+            </Button> }
             <Button
               onClick={() => searchPost(tags)}
               sx={buttonSearch}

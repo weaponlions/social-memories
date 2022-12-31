@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Typography, TextField, Button, Divider} from '@mui/material';
 import { createComment } from '../../../Redux/actions';
+import { RESET_TAG } from '../../../Redux/actionTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { divider } from './styles'
 
@@ -15,7 +16,7 @@ export const TextBox = ({postID}) => {
   const handleComment = async () => {  
     const owner = JSON.parse(localStorage.getItem('keywords'))
     await dispatch(createComment({message : comment, userName : owner['username'], userLogo : owner['picture'], userID : owner['id'], targetedUser : (tagUser && tagUser['username']), parentID : (tagUser && tagUser['parentID']) }, postID))
-    await dispatch({type: 'RESET_TAG'})
+    await dispatch({type: RESET_TAG})
     setComment('');
   };
 

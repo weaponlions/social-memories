@@ -32,7 +32,22 @@ export const RESET_SINGLE = 'RESET_SINGLE'
 export const FETCH_COMMENT = 'FETCH_COMMENT'
 export const CREATE_COMMENT = 'CREATE_COMMENT'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
+export const EXRTA_COMMENT = 'EXRTA_COMMENT'
 
 // child Comment
 export const CHILD_COMMENT = 'CHILD_COMMENT'
 export const NEW_CHILD = 'NEW_CHILD'
+export const EXRTA_CHILD = 'EXRTA_CHILD'
+
+// Loading Icon 
+export const START = 'START'
+export const END = 'END'
+
+// Notification
+export const SEND = 'SEND'
+export const STOP = 'STOP'
+export const READY = 'READY'
+
+// tag user when reply in comment section
+export const SET_TAG = 'SET_TAG'
+export const RESET_TAG = 'RESET_TAG'

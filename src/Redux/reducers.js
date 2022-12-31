@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { CREATE, UPDATE, LIKE, DELETE, SET_ID, ERASE_ID, SEARCH, RESET_SINGLE, FETCH_SINGLE, FETCH_COMMENT, UPDATE_COMMENT, CHILD_COMMENT, CREATE_COMMENT, NEW_CHILD, RESET } from './actionTypes'
+import * as code from './actionTypes'
 import { authReducer, spyReducer } from "./auth";
 
 
@@ -7,26 +7,26 @@ const postState = []
  
 const postReducer = (state = postState, {type, payload}) =>{
     switch (type) {
-        case CREATE: 
+        case code.CREATE: 
             if (state[0].length === 0) {
                 return [{totalPage: 1, data: [payload], currentPage: 1 }]
             }  
             return [{...state[0], data: [payload, ...state[0]['data']] }]
 
-        case UPDATE:
+        case code.UPDATE:
             return [{...state[0], data: state[0]['data'].map((post) => post._id === payload._id ? payload : post ) }]
 
-        case SEARCH: 
+        case code.SEARCH: 
             return [payload]
 
-        case DELETE:
+        case code.DELETE:
             // eslint-disable-next-line
             return [{...state[0], data: state[0]['data'].filter((post) => {if(post._id !== payload) return post}) }]
         
-        case RESET: 
+        case code.RESET: 
             return []
             
-        case LIKE:
+        case code.LIKE:
             return [{...state[0], data: state[0]['data'].map((post) => post._id === payload._id ? payload : post ) }] 
 
         default:
@@ -39,10 +39,10 @@ const singleData = null
 
 const singlePost = (state=singleData, {type , payload} ) => {
     switch (type) {
-        case FETCH_SINGLE:
+        case code.FETCH_SINGLE:
              return payload
     
-        case RESET_SINGLE:
+        case code.RESET_SINGLE:
              return null
         default:
             return state
@@ -54,10 +54,10 @@ const myID = null
  
 const updateIdReducer = (state=myID, {type, payload}) => {
     switch (type) { 
-        case SET_ID:
+        case code.SET_ID:
             return payload
 
-        case ERASE_ID:
+        case code.ERASE_ID:
             return null
             
         default:
@@ -72,16 +72,16 @@ const commentState = []
 
 const commentReducer = (state=commentState, {type, payload}) => {
     switch (type) {
-        case FETCH_COMMENT:
+        case code.FETCH_COMMENT:
             return [payload]
         
-        case 'EXRTA_COMMENT':
+        case code.EXRTA_COMMENT:
             return [{...payload, data : [...state[0]['data'], ...payload['data']] }] 
         
-        case CREATE_COMMENT:
+        case code.CREATE_COMMENT:
             return [{...state[0] , data : [payload, ...state[0]['data']] }]
 
-        case UPDATE_COMMENT: 
+        case code.UPDATE_COMMENT: 
             return [{...state[0] , data : [...state[0]['data'].filter((comment) => comment._id === payload.parentID ? (comment['childExist'] = true) : comment )] }] 
 
         default:
@@ -94,15 +94,15 @@ const childState = []
 
 const childReducer = (state=childState, {type, payload}) => { 
     switch (type) {
-        case CHILD_COMMENT:
+        case code.CHILD_COMMENT:
             return [payload]
 
-        case NEW_CHILD:
+        case code.NEW_CHILD:
             if (state.length === 0)  
                 return [{currentPage : 1, totalPage : 1, data : { [payload['parentID']] : [payload]}, commentID : [payload['parentID']]}]
             return [{...state[0], data: { [state[0]['commentID']] : [payload, ...state[0]['data'][state[0]['commentID']] ]} }]
             
-        case 'EXRTA_COMMENT':
+        case code.EXRTA_CHILD:
             return [{...payload, data : [...state[0]['data'], ...payload['data']] }]
         default:
             return state
@@ -114,10 +114,10 @@ const tagUserState = null
 
 const tagUserReducer = (state=tagUserState, {type, payload}) => { 
     switch (type) {
-        case 'SET_TAG': 
+        case code.SET_TAG: 
             return payload
 
-        case 'RESET_TAG':
+        case code.RESET_TAG:
             return null
 
         default:
@@ -129,10 +129,10 @@ const loading = true
 
 const loadingReducer = (state = loading, {type, payload}) => {
     switch (type) {
-        case 'START':
+        case code.START:
             return true
         
-        case 'END':
+        case code.END:
             return false
 
         default:
@@ -150,13 +150,13 @@ const alert = {
 
 const alertReducer = (state = alert, {type, payload}) => {
     switch (type) {
-        case 'READY':
+        case code.READY:
             return {...state, ...payload}
 
-        case 'SEND':
+        case code.SEND:
             return {...state, open : true, ...payload}
 
-        case 'STOP':
+        case code.STOP:
             return {...state, open: false}
     
         default:

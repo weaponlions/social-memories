@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-axios.defaults.baseURL = 'https://tame-gray-gosling-gear.cyclic.app/'
+axios.defaults.baseURL = 'http://localhost:5000'
 
 axios.interceptors.request.use((req) => {
   if (localStorage.getItem('keywords')) {
@@ -17,9 +17,7 @@ export const singlePost = (id) => axios.get(`${url}/${id}`)
 
 export const createPost = (newPost)=> axios.post(url, newPost, { headers : { 'Content-Type' : 'multipart/form-data' }} )
 
-export const updatePostWithImg = (data , id)=> axios.post(`${url}/${id}`, data ,{ headers : { 'Content-Type' : 'multipart/form-data' }} ) // update Data & Image
-
-export const updatePost = (data , id)=> axios.patch(`${url}/${id}`, data ) // update only Data
+export const updatePost = (data , id)=> axios.patch(`${url}/${id}`, data ) 
 
 export const deletePost = (id)=> axios.delete(`${url}/${id}`)
 

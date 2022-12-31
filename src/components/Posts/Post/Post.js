@@ -10,7 +10,7 @@ import Image from "../../../images/Text.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setPostID, deletePost, likePost } from "../../../Redux/actions";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-
+import { START } from '../../../Redux/actionTypes';
 
 const Post = ({ post }) => {
   
@@ -52,7 +52,7 @@ const Post = ({ post }) => {
  
   const openPost = async (id) => {
     location['key'] = id;
-    dispatch({type : 'START'});
+    dispatch({type : START});
     navigate(`/posts/${id}`);
   };
 
@@ -69,7 +69,7 @@ const Post = ({ post }) => {
             sx={media}
             image={
               post.selectedFile
-                ? `https://tame-gray-gosling-gear.cyclic.app/${post.selectedFile}`
+                ? post.selectedFile
                 : Image
             }
             title={post.title}

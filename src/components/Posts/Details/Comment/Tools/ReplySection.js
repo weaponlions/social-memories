@@ -27,15 +27,15 @@ export const ReplySection = ({ commentID, postID }) => {
               <li className="comment-list-row">
                 <div className="comment-list-row-inner">
                   <Template
-                    avatar={ele.userLogo}
                     size="60px"
+                    userID={ele.userID}
                     name={ele.userName}
-                    message={ele.message} 
+                    message={ele.message}
+                    avatar={ele.userLogo}
+                    commentID={commentID}
                     createdAt={ele.createdAt}
                     targetedUser={ele.targetedUser}
-                    commentID={commentID}
-                    userID={ele.userID}
-                  ></Template>
+                  />
                 </div>
               </li>
             </ul>

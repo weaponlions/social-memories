@@ -11,7 +11,7 @@ import { SearchTool } from "./SearchTool";
 import SearchIcon from '@mui/icons-material/Search';
 import PencilIcon from '@mui/icons-material/Create';
 import ResetIcon from '@mui/icons-material/RotateLeft';
-import { RESET } from "../../Redux/actionTypes";
+import { RESET, END, START } from "../../Redux/actionTypes";
 
 export const Home = () => { 
 
@@ -66,7 +66,7 @@ export const Home = () => {
   
 
  const Sleep = (time, key) => {
-  dispatch({type: 'START'})
+  dispatch({type: START})
   setTimeout( ()=> {
     switch (key) {
       case 'SEARCH_TAG':
@@ -78,7 +78,7 @@ export const Home = () => {
         break;
 
       default:
-        dispatch({type: 'END'});
+        dispatch({type: END});
         break;
     }  
   }, time)
@@ -111,7 +111,7 @@ export const Home = () => {
     setReset(false);
     setTitle("");
     setTags([]);
-    dispatch({type: 'START'})
+    dispatch({type: START})
     navigate('/');
   };
 

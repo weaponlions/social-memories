@@ -5,7 +5,6 @@
   },
  })
 
- 
 
  export const paper = (theme) => ({
   paddingTop: theme.spacing(3),  
@@ -25,6 +24,17 @@
 
  export const buttonSubmit = (theme) => ({
   marginBottom: theme.spacing(2),
+ })
+
+ 
+ export const buttonSearchAdd = (theme) => ({
+  left: '30%',
+  width: '35%',
+    margin: theme.spacing(1),
+    display: 'none',
+    [theme.breakpoints.down("sm")] : {
+      display: 'block'
+    }
  })
 
  
