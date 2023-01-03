@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "https://social-mern-memories.netlify.app/*"
+  to = "/index.html"
+  status = 200

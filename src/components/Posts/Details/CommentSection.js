@@ -16,7 +16,6 @@ const CommentSection = ({ postID }) => {
     dispatch(getComments({page : 1, postID : postID}))
     // eslint-disable-next-line
   }, [dispatch])
-   
   return (
     <div>
       <Paper sx={commentsOuterContainer}>

@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 axios.defaults.baseURL = 'https://tame-gray-gosling-gear.cyclic.app'
 
 axios.interceptors.request.use((req) => {
@@ -11,13 +12,14 @@ axios.interceptors.request.use((req) => {
 
 const url = '/posts'
 
-export const searchPost = (query)=> axios.get(`${url}/search=${ query?.title ? query.title : null }/${ query?.tags ? query.tags : null }/${ query?.page ? query.page : 1}`)
+export const searchPost = (query)=> axios.get(`${url}/search=${ query?.title ? query.title : null }/${ query?.tags ? query.tags : null }/${ query?.creator ? query.creator : null }/${ query?.page ? query.page : 1}`)
 
 export const singlePost = (id) => axios.get(`${url}/${id}`)
 
-export const createPost = (newPost)=> axios.post(url, newPost, { headers : { 'Content-Type' : 'multipart/form-data' }} )
+export const createPost = (newPost)=> axios.post(`${url}/new`, newPost, { headers: {"Content-Type": "multipart/form-data" } }) 
+ 
 
-export const updatePost = (data , id)=> axios.patch(`${url}/${id}`, data ) 
+export const updatePost = (data , id)=> axios.patch(`${url}/${id}`, data,  { headers: {"Content-Type": "application/octet-stream" } }) 
 
 export const deletePost = (id)=> axios.delete(`${url}/${id}`)
 

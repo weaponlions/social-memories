@@ -3,6 +3,7 @@ import Template from "./Tools/Template";
 import "./styles.css";
 import { useDispatch } from 'react-redux'
 import { getComments } from "../../../../Redux/actions";
+import { Paper } from "@mui/material";
 
 export const Comments = ({ comment, postID }) => {
 
@@ -13,6 +14,15 @@ export const Comments = ({ comment, postID }) => {
     await dispatch(getComments({page : page, postID : postID}))
   };
  
+  if(comment && comment[0] && comment[0]['data'] && comment[0]['data'].length === 0){
+    return(
+      <>
+      <Paper component={'div'} sx={(theme) => ({margin: theme.spacing(2), padding: theme.spacing(2)})} > 
+        No Comment Yet
+      </Paper>
+      </>
+    )
+  }
 
   return (
     <>

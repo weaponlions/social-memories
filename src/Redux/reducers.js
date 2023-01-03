@@ -110,6 +110,19 @@ const childReducer = (state=childState, {type, payload}) => {
 }
 
 
+
+const recommendedPost = []
+
+const recommendedReducer = (state=recommendedPost, {type, payload}) => { 
+    switch (type) {
+        case code.OTHER_POST:
+            return [payload] 
+        default:
+            return state
+    }
+}
+
+
 const tagUserState = null
 
 const tagUserReducer = (state=tagUserState, {type, payload}) => { 
@@ -164,4 +177,4 @@ const alertReducer = (state = alert, {type, payload}) => {
     }
 }
 
-export default combineReducers({postReducer, updateIdReducer, authReducer, spyReducer, singlePost, commentReducer, childReducer, tagUserReducer, alertReducer, loadingReducer})
+export default combineReducers({postReducer, updateIdReducer, authReducer, spyReducer, singlePost, commentReducer, childReducer, tagUserReducer, alertReducer, loadingReducer, recommendedReducer})

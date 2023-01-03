@@ -1,14 +1,15 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Typography, TextField, Button, Divider} from '@mui/material';
+import { TextField, Button, Divider, Paper} from '@mui/material';
 import { createComment } from '../../../Redux/actions';
-import { RESET_TAG } from '../../../Redux/actionTypes';
+import { RESET_TAG, START } from '../../../Redux/actionTypes';
 import { useDispatch, useSelector } from 'react-redux';
-import { divider } from './styles'
+import { divider, boxPaper } from './styles'; 
+import { Link } from 'react-router-dom'; 
 
 export const TextBox = ({postID}) => {  
   const tagUser = useSelector((state) => state.tagUserReducer)
   const refs = useRef()
-  const [comment, setComment] = useState(); 
+  const [comment, setComment] = useState(''); 
   const dispatch = useDispatch()
   const isLogged = useSelector((state) => state.spyReducer)
    
@@ -30,20 +31,19 @@ export const TextBox = ({postID}) => {
   return (
     <>
     { isLogged ? 
-    (<div style={{ width: '70%' }}> 
-          <Divider sx={divider} />
-          <Typography gutterBottom variant="h6">Write a comment</Typography>
-          <TextField inputRef={refs} fullWidth minRows={5} variant="outlined" label="Comment" multiline value={comment} onChange={(e) => setComment(e.target.value)} > </TextField>
+    (<Paper component={'div'} sx={boxPaper}> 
+          <Divider sx={divider} /> 
+          <TextField inputRef={refs} fullWidth minRows={5} variant="outlined" label="Write a comment" value={comment} onChange={(e) => setComment(e.target.value)} > </TextField>
           <br />
           <Button style={{ marginTop: '10px' }} fullWidth disabled={ comment ? !comment.length : false} color="primary" variant="contained" onClick={handleComment}>
             Comment
           </Button>
-    </div>) 
+    </Paper>) 
     : (
         <>
-        <div style={{"display" : "flex", "justifyContent" : "center", "alignItems": "center", "width": "50%", "height": "100%"}}>
-            <h1>Login Please</h1>
-        </div>
+        <Paper component={'div'} sx={(theme) => ( { margin : theme.spacing(2), padding: theme.spacing(3), boxShadow: 'none' })} > 
+            <Button component={Link} fullWidth onClick={() => dispatch({type : START})} to='/auth' variant='contained' color='secondary' >Please Sign In</Button> 
+        </Paper>
         </>
     )
     }

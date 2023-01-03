@@ -6,24 +6,27 @@ width: '100%',
 maxHeight: '600px',
 }
 
-export const section = {
-  borderRadius: '20px',
-    margin: '10px',
+export const section = (theme) => ({
+    borderRadius: '20px',
+    margin: theme.spacing(5),
     flex: 1,
-}
+    boxShadow: 'none',
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+    }
+})
 
 export const card = (theme) => ({
-  display: 'flex',
+    display: 'flex',
     width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      flexWrap: 'wrap',
-      flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {  
+      flexDirection: 'column-reverse',
+      gap: '3rem', 
     },
     [theme.breakpoints.down('md')]: {
-      flexWrap: 'wrap',
-      flexDirection: 'column',
+      flexWrap: 'wrap', 
     },
-  boxShadow: 'none'
+  boxShadow: 'none', 
 })
 
 export const paper = (theme) => ({
@@ -43,17 +46,6 @@ export const paper = (theme) => ({
   },
 })
 
-export const commentsInnerContainer = (theme) => ({
-    height: '400px',
-    overflowY: 'auto', 
-    width: '100%',
-    boxShadow: 'none',
-    padding: theme.spacing(2),
-    [theme.breakpoints.down('md')]:{
-      marginBottom: theme.spacing(3),
-    },
-})
-
 export const divider = (theme) => ({
   display: 'none',
   [theme.breakpoints.down("md")]: {
@@ -61,12 +53,33 @@ export const divider = (theme) => ({
   }
 })
 
+export const commentsInnerContainer = (theme) => ({
+    overflowY: 'auto', 
+    maxHeight: '500px',
+    width: '100%',
+    boxShadow: 'none',
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('md')]:{
+      marginBottom: theme.spacing(3),
+    },
+    [theme.breakpoints.down('sm')]:{
+      margin: 0,
+      padding: 0,
+    },
+})
+
+
 export const commentsOuterContainer = (theme) => ({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
+  width: '70%',
   boxShadow: 'none',
   [theme.breakpoints.down('md')]:{
+    width: '90%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  [theme.breakpoints.down('sm')]:{
+    width: '100%',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -82,12 +95,14 @@ export const loadingPaper = {
   borderRadius: '15px',
   height: '39vh',
 }
-export const recommendedPosts = (theme) => ({
-    display: 'flex',
+
+export const recommendedSx = (theme) => ({
+    boxShadow: 'none',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
 })
+
 export const imageSection = (theme) => ({
   marginLeft: '20px',
   [theme.breakpoints.down('sm')]: {
@@ -95,57 +110,45 @@ export const imageSection = (theme) => ({
   },
 })
 
+export const paperPostSX = (theme) => ({
+  boxShadow: 'none',
+  display: 'flex',
+  margin: theme.spacing(2), 
+  marginTop: theme.spacing(4), 
+  cursor: 'pointer',
+  gap: '2rem', 
+  [theme.breakpoints.down('sm')] : {
+    flexDirection: 'column-reverse',
+    gap: '1rem', 
+  },
+  [theme.breakpoints.down('md')] : {
+    flexDirection: 'column-reverse',
+    gap: '2rem', 
+  }
+})
 
-// export default makeStyles((theme) => ({
-//   media: {
-//     borderRadius: '20px',
-//     objectFit: 'cover',
-//     width: '100%',
-//     maxHeight: '600px',
+ 
+export const imgSx = (theme)=> ({
+  borderRadius: '2rem', 
+  [theme.breakpoints.down('sm')] : {
+    borderRadius: '0.6rem',
+    width: '100%'
+  },
+  [theme.breakpoints.down('md')] : {
+    margin: 'auto'
+  }
+})
 
-//   },
-//   card: {
-//     display: 'flex',
-//     width: '100%',
-//     [theme.breakpoints.down('sm')]: {
-//       flexWrap: 'wrap',
-//       flexDirection: 'column',
-//     },
-//   },
-//   section: {
-//     borderRadius: '20px',
-//     margin: '10px',
-//     flex: 1,
-//   },
-//   imageSection: {
-//     marginLeft: '20px',
-//     [theme.breakpoints.down('sm')]: {
-//       marginLeft: 0,
-//     },
-//   },
-//   recommendedPosts: {
-//     display: 'flex',
-//     [theme.breakpoints.down('sm')]: {
-//       flexDirection: 'column',
-//     },
-//   },
-//   loadingPaper: {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: '20px',
-//     borderRadius: '15px',
-//     height: '39vh',
-//   },
-//   commentsOuterContainer: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'end'
-//   },
-//   commentsInnerContainer: {
-//     height: '500px',
-//     overflowY: 'auto',
-//     marginRight: '30px',
-//     width: '100%'
-//   },
-// }));
+export const paperRecommend = (theme) => ({ 
+  boxShadow: 'none',
+})
+
+export const boxPaper = (theme) => ({
+  width: '50%',
+  [theme.breakpoints.down('md')]: {
+    width: '80%',
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '100%'
+  },
+})

@@ -9,7 +9,12 @@
  export const paper = (theme) => ({
   paddingTop: theme.spacing(3),  
   marginTop: theme.spacing(3), 
-  backgroundColor: 'white',  
+  backgroundColor: 'white',
+  [theme.breakpoints.down('md')]: {
+    right : 0,
+    left: 50,
+    margin: 0
+  }
  })
 
  export const form = {

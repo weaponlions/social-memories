@@ -4,11 +4,13 @@ import * as code from './actionTypes'
 export const getPostsBySearch = (query) => async(dispatch) =>{
     try {
         const { data } = await api.searchPost(query)
-        dispatch({type: code.END});
         if(data['message'] === "No Record Found"){
-           return dispatch ({ type: code.SEARCH, payload: [] })
+            await dispatch ({ type: code.SEARCH, payload: [] })
         } 
-        return dispatch ({ type: code.SEARCH, payload: data})
+        else{
+            await dispatch ({ type: code.SEARCH, payload: data})
+        } 
+        return dispatch({type: code.END});
     } catch (err) {
         console.log(err.message); 
         dispatch({type: code.END})
@@ -16,10 +18,26 @@ export const getPostsBySearch = (query) => async(dispatch) =>{
     }
 } 
 
+export const getPostByTag = (query, id) => async(dispatch) =>{
+    try {
+        const { data } = await api.searchPost(query)
+        if(data['message'] === "No Record Found"){
+            return ;
+        } 
+        else{ 
+            const newData = data.data.filter((p) => { if (p._id !== id) return p} )
+            return await dispatch ({ type: code.OTHER_POST, payload: newData})
+        } 
+    } catch (err) {
+        console.log(err.message);
+        // return dispatch({ type: code.SEND, payload : { message : "Something Went Wrong, Please Try Again Later", mode : 'error' } });
+    }
+} 
+
 export const createPost = (post) => async (dispatch)=> {
     try {
         dispatch({ type : code.SEND, payload : { message : "Post Uploading, Please Wait", mode : 'info' } });
-        const { data } = await api.createPost(post);
+        const { data } = await api.createPost(post); 
         dispatch({type: code.CREATE, payload: data});
         return dispatch({ type: code.SEND, payload : { message : "Post Successfully Created, Now Enjoy", mode : 'success' } });
     } catch (error) {
@@ -29,10 +47,10 @@ export const createPost = (post) => async (dispatch)=> {
 }
  
 export const updatePost = (updata, id)=> async (dispatch) => {
-    try {
-        console.log(updata);
+    try { 
         dispatch({ type: code.SEND, payload : { message : "Post Updating, Please Wait", mode : 'info' } });
-        const { data } = await api.updatePost(updata, id)
+        const { data } = await api.updatePost(updata, id) 
+        await dispatch({ type: code.SET_TAG, payload: data})
         dispatch({ type: code.UPDATE, payload: data})
         return dispatch({ type: code.SEND, payload : { message : "Post Successfully Updated, Now Enjoy", mode : 'success' } });
     } catch (error) {
@@ -67,10 +85,13 @@ export const likePost = (id)=> async (dispatch) => {
 
 export const singlePost = (id)=> async (dispatch) => {
     try {
-        const { data } = await api.singlePost(id)
-        return dispatch({ type: code.FETCH_SINGLE, payload: data})
-    } catch (error) {
-        console.log(error)
+        const { data } = await api.singlePost(id) 
+         dispatch({ type: code.FETCH_SINGLE, payload: data})
+        return dispatch(getPostByTag({tags: data?.tags.join(',')}, id))
+    } catch (error) { 
+        dispatch({ type: code.FETCH_SINGLE, payload: {message : 'Request failed with status code 403'}})
+        console.log(error) 
+        return dispatch({ type: code.SEND, payload : { message : "Going Wrong Way, Please Try Again Later", mode : 'error' } });
     }
 } 
  

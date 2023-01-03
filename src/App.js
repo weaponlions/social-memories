@@ -8,7 +8,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { FIRSTLOAD } from "./Redux/actionTypes";
 import { SnackBarAlert } from "./components/Auth/SnackBarAlert";
 import { PostDetails } from './components/Posts/Details/PostDetails';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import { tokenExpired } from "./Redux/auth";
 import { Loading } from "./components/Home/Loading";
 
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
+      <HashRouter basename="/">
       <GoogleOAuthProvider clientId="1055623080920-lbi811elfirlqor3ksr0cukij3pgu4la.apps.googleusercontent.com" >
           <Container maxWidth="xl"> 
             <Navbar />
@@ -38,11 +38,12 @@ function App() {
               <Route exact path='/posts/search' element={<Home/>} />
               <Route exact path='/posts/:id' element={<PostDetails />} />
               <Route exact path='/posts/tags/:tag' element={<Home />} />
+              <Route exact path='/posts/creators/:creator' element={<Home />} />
               <Route exact path='/auth' element={<Auth/>} /> 
             </Routes>
           </Container>
           </GoogleOAuthProvider>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }

@@ -1,20 +1,12 @@
-import React, { forwardRef, useState, useRef } from "react";
-import {
-  Dialog,
-  Button,
-  Slide,
-  Paper,
-  Divider,
-  Typography,
-  TextField,
-  Chip,
-} from "@mui/material";
-import { buttonSearch, buttonSearchAdd } from "./styles";
+import React, { forwardRef } from "react";
+import { Dialog, Button, Slide, Paper, Divider, Typography, TextField } from "@mui/material";
+import { buttonSearch } from "./styles";
 import { useDispatch } from "react-redux";
 import { getPostsBySearch } from "../../Redux/actions";
 import { RESET } from "../../Redux/actionTypes";
 import { useNavigate } from "react-router-dom";
 import { START } from "../../Redux/actionTypes";
+import ChipInput from "material-ui-chip-input";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
@@ -30,14 +22,12 @@ export const SearchTool = ({
   setReset,
 }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [track, setTrack] = useState();
-  const tagRef = useRef();
+  const navigate = useNavigate();  
 
   const searchPost = async (tags) => {
     if (title.trim() || tags) {
       navigate(
-        `/posts/Search?${tags ? `tag=${tags.join(",")}` : ""}${
+        `/posts/search?${tags ? `tag=${tags.join(",")}` : ""}${
           title ? `title=${title} ` : ""
         }`
       );
@@ -60,22 +50,12 @@ export const SearchTool = ({
   };
 
   const handleAddChip = (tag) => {
-    setTags([...tags, tag]);
-    setTrack('')
-  };
-
-  const handleAddChipBtn = () => { 
-    if (track !== '' && track !== undefined ) {
-      handleAddChip(track);
-      tagRef.current.value = '';
-      tagRef.current.focus();
-    } 
+    setTags([...tags, tag.toUpperCase()]);
   };
 
   const handleDeleteChip = (chipToDelete) => {
     setTags(tags.filter((tag) => tag !== chipToDelete));
-  };
-
+  }
   const handleClose = () => {
     setOpenSearch(false);
   };
@@ -105,7 +85,8 @@ export const SearchTool = ({
             [theme.breakpoints.down('md')] : {
               right: 0,
               width: '90%',
-              margin: theme.spacing(1)
+              margin: theme.spacing(1),
+              marginLeft: 0,
             }, 
           }),
           }}
@@ -138,47 +119,17 @@ export const SearchTool = ({
               onChange={(e) => setTitle(e.target.value)}
               sx={(theme) => ({ margin: theme.spacing(1) })} 
             />
-
-            <TextField
-              InputProps={{
-                startAdornment: (tags[0] !== undefined) ? tags.map((tag) => (
-                  <Chip
-                    key={tag}
-                    tabIndex={-1}
-                    label={tag}
-                    onDelete={() => handleDeleteChip(tag)}
-                    sx={(theme) => ({ margin: theme.spacing(1) })}
-                  />
-                )) : '',
-                onKeyDownCapture: (e) => { 
-                  const value = (e.target.value).trim()
-                  setTrack(value) 
-                  if (value !== '' && (e.code === "Enter" || e.code === "Space") ) {
-                    handleAddChip(value);
-                    e.target.value = "";
-                    tagRef.current.focus() 
-                  }
-                },
-                sx: {
-                  flexWrap: "wrap",
-                  flexDirection: "row",
-                },
-                placeholder: (track === "" || track === undefined ) ? "Search Tag" : "Search Tag",
-              }}
+            
+            <ChipInput
+              style={{ margin: "10px 0.5rem" }}
+              value={tags}
+              onAdd={(chip) => handleAddChip(chip)}
+              onDelete={(chip) => handleDeleteChip(chip)}
+              label="Search Tags (Press Enter For Multiple)"
               variant="outlined"
               fullWidth
-              sx={(theme) => ({ margin: theme.spacing(1) })}
-              label = "Write Tag (Press Space for Multiple)"
-              inputRef={tagRef}
             />
-            { track && track !== '' && track !== undefined && <Button 
-             variant="contained"
-             color="primary"
-             sx={buttonSearchAdd} 
-             onClick={handleAddChipBtn}
-            >
-              ADD Tag
-            </Button> }
+
             <Button
               onClick={() => searchPost(tags)}
               sx={buttonSearch}

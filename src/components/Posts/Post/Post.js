@@ -1,5 +1,5 @@
-import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase, } from "@mui/material";
 import React from "react";
+import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase, } from "@mui/material";
 import {media, card, cardAction, cardActions, overlay, overlay2, details, title} from "./styles";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpAltOutlined from "@mui/icons-material/ThumbUpAltOutlined";
@@ -60,16 +60,16 @@ const Post = ({ post }) => {
     dispatch(setPostID(postId))
   }
   
-
   return (
     <>
+    { post && (
       <Card sx={card} raised elevation={6}>
         <ButtonBase sx={cardAction} component="span" name="test">
           <CardMedia
             sx={media}
             image={
               post.selectedFile
-                ? post.selectedFile
+                ? post.selectedFile[0]
                 : Image
             }
             title={post.title}
@@ -117,7 +117,7 @@ const Post = ({ post }) => {
             size="small"
             color="primary"
             onClick={handleLike}
-            disabled={!isLogged}
+            disabled={!isLogged || (post.owner === userId)}
           >
             <Likes />
           </Button>
@@ -132,6 +132,7 @@ const Post = ({ post }) => {
           )}
         </CardActions>
       </Card>
+    )}
     </>
   );
 };

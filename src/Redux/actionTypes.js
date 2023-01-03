@@ -26,6 +26,7 @@ export const LOGOUT = 'LOGOUT'
 // for Single Post
 export const FETCH_SINGLE = 'FETCH_SINGLE'
 export const RESET_SINGLE = 'RESET_SINGLE'
+export const OTHER_POST = 'OTHER_POST'
 
 
 // Parent comment Action 
